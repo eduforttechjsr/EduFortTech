@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduFort Technologies — Smart Safety for Smarter Schools</title>
+
+  <style>
+    /* ========== RESET ========== */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; }
+    body { font-family: Arial, Helvetica, sans-serif; color:#0f172a; background:#ffffff; }
+    a { color:inherit; text-decoration:none; }
+    img { max-width:100%; display:block; }
+
+    /* ========== UTIL ========== */
+    .wrap { max-width: 1600px; margin: 0 auto; padding: 0 20px; }
+    .section { padding: 64px 0; }
+    .alt { background:#f8fafc; }
+    .muted { color:#64748b; }
+    .button, .btn { display:inline-block; padding:10px 16px; border-radius:8px; background:#2563eb; color:#fff; font-weight:600; }
+    .button:hover, .btn:hover { background:#1e40af; }
+    .btn.secondary { background:#0ea5e9; }
+    .btn.secondary:hover { background:#0369a1; }
+
+    /* ========== TOP MARQUEE ========== */
+    .top-marquee { background:#1e3a8a; color:#fff; font-size:14px; }
+    .top-marquee marquee { padding:6px 0; }
+
+    /* ========== HEADER / NAV ========== */
+    header.site-header { position: sticky; top: 0; z-index: 1000; background:#ffffffcc; backdrop-filter: blur(6px); box-shadow: 0 2px 12px rgba(15,23,42,.08); }
+    .navbar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 0; }
+    .brand { display:flex; align-items:center; gap:10px; }
+    .brand-img { width:48px; height:48px; border-radius:50%; object-fit:cover; }
+    .brand-name { font-weight:800; letter-spacing:.2px; }
+    .brand-tagline { font-size:12px; color:#475569; }
+
+    /* center nav with flex grow on middle, button right */
+    .nav-holder { display:flex; align-items:center; gap:16px; flex:1; }
+    .spacer { flex:1; } /* pushes nav to center nicely */
+
+    nav.main-menu ul { list-style:none; display:flex; align-items:center; gap:6px; }
+    nav.main-menu > ul > li > a { padding:10px 12px; border-radius:8px; font-weight:600; color:#0f172a; }
+    nav.main-menu > ul > li > a:hover { background:#eef2ff; color:#1e3a8a; }
+
+    /* book demo desktop */
+    .book-demo { margin-left:auto; }
+    .book-demo .demo-btn { background:#ef4444; }
+    .book-demo .demo-btn:hover { background:#b91c1c; }
+
+    /* ========== DROPDOWN ========== */
+    .has-dropdown { position:relative; }
+    .dropdown {
+      position:absolute; top: calc(100% + 8px); left:0; min-width:220px;
+      background:#fff; border:1px solid #e2e8f0; border-radius:12px;
+      box-shadow: 0 12px 24px rgba(2,6,23,.12);
+      padding:8px; display:none;
+    }
+    .dropdown li a { display:block; padding:10px 12px; border-radius:8px; color:#0f172a; }
+    .dropdown li a:hover { background:#f1f5f9; }
+    /* show on hover (desktop) */
+    @media (min-width: 769px) {
+      .has-dropdown:hover .dropdown { display:block; }
+    }
+
+    /* ========== MOBILE NAV ========== */
+    #nav-toggle { display:none; border:none; background:#e2e8f0; font-size:22px; padding:8px 12px; border-radius:8px; }
+    @media (max-width: 768px) {
+      #nav-toggle { display:block; }
+      .spacer { display:none; }
+      .book-demo { display:none; } /* use menu item instead */
+      nav.main-menu ul { flex-direction:column; align-items:stretch; gap:0; display:none; width:100%; background:#fff; border:1px solid #e2e8f0; border-radius:12px; margin-top:10px; overflow:hidden; }
+      nav.main-menu ul.show { display:flex; }
+      nav.main-menu > ul > li > a { padding:14px 16px; border-radius:0; border-bottom:1px solid #e2e8f0; }
+      nav.main-menu > ul > li:last-child > a { border-bottom:none; }
+      /* dropdown on mobile opens inline */
+      .dropdown { position:static; display:none; border:none; box-shadow:none; padding:0; border-radius:0; }
+      .has-dropdown.active .dropdown { display:block; }
+      .dropdown li a { padding:12px 18px; border-bottom:1px dashed #e2e8f0; }
+      .dropdown li:last-child a { border-bottom:none; }
+    }
+
+    /* ========== HERO ========== */
+    .hero { background: linear-gradient(120deg,#1e3a8a 0%, #3b82f6 50%, #0ea5e9 100%); color:#fff;}
+    .hero-grid { display:grid; grid-template-columns: 1.2fr 1fr; align-items:center; gap:30px; }
+    .hero h1 { font-size:38px; line-height:1.2; margin-bottom:12px; }
+    .hero p.lead { font-size:16px; opacity:.95; }
+    .hero-action { margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; }
+    .hero .btn.primary { background:#22c55e; }
+    .hero .btn.primary:hover { background:#16a34a; }
+    .hero-card { border-radius:16px; overflow:hidden; box-shadow:0 16px 36px rgba(2,6,23,.25); }
+    .hero-img { width:100%; height:100%; object-fit:cover; min-height:260px; }
+
+    @media (max-width: 980px) {
+      .hero-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ========== GENERIC CARDS ========== */
+    .cards { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
+    .card {
+      background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:18px;
+      box-shadow: 0 6px 16px rgba(2,6,23,.06);
+      flex: 1 1 300px; max-width: 380px;
+    }
+    .card h2 { font-size:20px; margin:8px 0; }
+    .card p { color:#334155; }
+    .button.btn-right { float:right; margin-top:8px; }
+
+    /* ========== STACK / LISTS ========== */
+    .stack { display:grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+    .stack li { background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:12px; box-shadow:0 4px 10px rgba(2,6,23,.05); }
+
+    /* ========== PRICING ========== */
+    .pricing-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:20px; }
+    .pricing-card { display:flex; gap:16px; border:1px solid #e2e8f0; background:#fff; border-radius:14px; padding:18px; box-shadow:0 6px 16px rgba(2,6,23,.06); }
+    .pricing-icon { width:96px; height:96px; border-radius:12px; object-fit:cover; }
+    .pricing-text h2 { margin-bottom:6px; }
+
+    /* ========== TEAM ========== */
+    .team-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap:16px; }
+    .member { text-align:center; background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:16px; box-shadow:0 6px 16px rgba(2,6,23,.06); }
+    .member img { width:96px; height:96px; border-radius:50%; margin:0 auto 10px; object-fit:cover; }
+
+    /* ========== TESTIMONIALS ========== */
+    .testimonials { display:grid; gap:12px; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); }
+    .testimonials blockquote { background:#fff; border-left:4px solid #1e3a8a; border-radius:10px; padding:12px 14px; color:#0f172a; box-shadow:0 4px 12px rgba(2,6,23,.06); }
+
+    /* ========== CONTACT ========== */
+    .contact-grid { display:grid; grid-template-columns: 1.2fr 1fr; gap:20px; }
+    .contact-form { display:grid; gap:10px; }
+    .contact-form input, .contact-form textarea {
+      padding:12px 14px; border:1px solid #cbd5e1; border-radius:10px; font: inherit;
+    }
+    .contact-form textarea { min-height:120px; resize:vertical; }
+    .contact-info { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:16px; box-shadow:0 6px 16px rgba(2,6,23,.06); }
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns:1fr; }
+    }
+
+    /* ========== FOOTER ========== */
+    footer.custom-footer { background:#0b1220; color:#cbd5e1; }
+    .footer-wrap { display:grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap:24px; }
+    .footer-logo { width:56px; height:56px; border-radius:50%; margin-bottom:8px; }
+    .footer-col ul { list-style:none; display:grid; gap:8px; }
+    .footer-col ul a { color:#cbd5e1; }
+    .footer-bottom { border-top:1px solid #1f2937; margin-top:16px; padding-top:14px; text-align:center; font-size:14px; }
+    .map-col iframe { width:100%; height:160px; border-radius:10px; border:0; }
+    @media (max-width: 980px) {
+      .footer-wrap { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .footer-wrap { grid-template-columns: 1fr; }
+    }
+
+/* DROPDOWN FIX */
+.main-menu ul li ul.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  display: none;
+  min-width: 200px;   /* dropdown की चौड़ाई */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  border-radius: 6px;
+  flex-direction: column;   /* vertical list */
+  padding: 8px 0;
+  z-index: 1000;
+}
+
+.main-menu ul li:hover ul.dropdown {
+  display: flex;   /* अब flex column में दिखेगा */
+}
+
+.main-menu ul li ul.dropdown li {
+  width: 100%;
+}
+
+.main-menu ul li ul.dropdown li a {
+  padding: 8px 14px;
+  display: block;
+  color: #000;
+  text-decoration: none;
+}
+
+.main-menu ul li ul.dropdown li a:hover {
+  background: #f5f5f5;
+}
+
+/* Hide duplicate Book Demo properly */
+.desktop-demo {
+  display: block;
+}
+
+.mobile-demo {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-demo {
+    display: none;
+  }
+  .mobile-demo {
+    display: block;
+  }
+}
+
+
+
+./* Universal Button Style */
+.btn,
+.book-demo a,
+.mobile-demo a,
+button,
+input[type="submit"] {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 25px;       /* rounded pill shape */
+  background: linear-gradient(45deg, #4F2FD0, #2F5FD0);
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border: none;
+  cursor: pointer;
+}
+
+/* Hover Effect */
+.btn:hover,
+.book-demo a:hover,
+.mobile-demo a:hover,
+button:hover,
+input[type="submit"]:hover {
+  background: linear-gradient(45deg, #ee0979, #ff6a00);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  color: #fff;
+}
+
+
+
+.hero img {
+  max-width: 300px;   /* image ki max width fix karein */
+  width: 100%;        /* responsive banane ke liye */
+  height: auto;       /* aspect ratio maintain karega */
+  display: block;
+  margin: 20px auto;  /* center alignment */
+}
+
+
+/* About Us Section */
+/* About Us Section */
+
+
+/* Universal Button Style - FORCE APPLY */
+.btn,
+.book-demo a,
+.mobile-demo a,
+.orange-btn,
+button,
+input[type="submit"],
+a.button {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 50px; /* pill shape */
+  background: linear-gradient(45deg, #4F2FD0, #2F5FD0) !important;
+  color: #fff !important;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border: none !important;
+  cursor: pointer;
+}
+
+/* Hover Effect - FORCE APPLY */
+.btn:hover,
+.book-demo a:hover,
+.mobile-demo a:hover,
+.orange-btn:hover,
+button:hover,
+input[type="submit"]:hover,
+a.button:hover {
+  background: linear-gradient(45deg, #ee0979, #ff6a00) !important;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  color: #fff !important;
+}
+
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: url("images/bg.jpg") no-repeat center center fixed; 
+  background-size: cover;  /* image stretch होकर screen cover करेगी */
+}
+
+
+.main-menu ul li a {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: black;
+  transition: all 0.3s ease;
+}
+
+/* Force Gradient on Hover */
+.main-menu ul li a:hover {
+  color: #fff !important;
+  background: linear-gradient(45deg, #ee0979, #ff6a00) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+}
+
+
+/* Wrap container */
+.wrap {
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Referral-commission Card */
+.referral-commission-card {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  background: transparent; /* agar fully transparent chahiye */
+  padding: 40px 20px 20px 20px;
+}
+
+/* Back button top-right */
+.page-actions {
+  display: flex;
+  justify-content: right;
+  margin-bottom: 20px;
+}
+/* Back button top-right */
+.referral-commission-card .back-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  text-decoration: none;
+}
+
+.page-actions .orange-btn {
+  text-decoration: none;
+  padding: 10px 20px;
+  background: #ff7a00;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.page-actions .orange-btn:hover {
+  background: #e06b00;
+}
+
+/* Headings */
+.referral-commission-card h1 {
+  text-align: center;
+  color: #1e3a8a;
+  margin-bottom: 10px;
+}
+
+.referral-commission-card h2, 
+.referral-commission-card h3 {
+  text-align: center;
+  color: #1e3a8a;
+  margin-bottom: 20px;
+}
+
+/* Pricing Cards Section */
+.pricing-cards {
+  padding: 50px 20px;
+  background: #f0f4f8;
+}
+
+.pricing-cards .card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  flex: 1 1 280px;
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pricing-cards .card h3 {
+  color: #1e3a8a;
+  margin-bottom: 10px;
+}
+
+.pricing-cards .card p {
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.pricing-cards .flow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pricing-cards .flow div {
+  background: #eef6fc;
+  padding: 12px;
+  border-radius: 10px;
+  flex: 1;
+  font-weight: 500;
+  color: #1e3a8a;
+  text-align: center;
+}
+
+/* Self Earn Section */
+#self-earn {
+  padding: 50px 20px;
+  background: #f0f4f8;
+  text-align: center;
+}
+
+#self-earn h2 {
+  color: #1e3a8a;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+#self-earn p {
+  color: #555;
+  font-size: 1rem;
+  margin-bottom: 40px;
+}
+
+/* Steps Cards */
+#referral-earn .step-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  flex: 1 1 200px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin: 10px;
+}
+
+#referral-earn .step-card h3 {
+  color: #1e3a8a;
+  margin-bottom: 10px;
+}
+
+#referral-earn .step-card p {
+  color: #555;
+  margin-bottom: 5px;
+}
+
+/* Card Actions Buttons */
+.card-actions {
+  display: flex;
+  justify-content: right;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.card-actions a {
+  text-decoration: none;
+  padding: 12px 25px;
+  background: #ff7a00;
+  color: #fff;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.card-actions a:hover {
+  background: #e06b00;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pricing-cards .card, #self-earn .step-card {
+    flex: 1 1 100%;
+  }
+  .card-actions {
+    flex-direction: column;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+  </style>
+</head>
+<body>
+
+  <!-- ========= TOP MARQUEE ========= -->
+  <div class="top-marquee">
+    <marquee behavior="scroll" direction="left" scrollamount="08">
+      🚀 EduFort Technologies | Smart Safety for Smarter Schools | Trusted Happy Clients | Years of Experience | No. of Users | Our Office | STUDENT SECURITY SYSTEMS | ERP SOFTWARE (SCHOOL & COLLEGES) | Many more
+    </marquee>
+  </div>
+
+  <!-- ========= HEADER ========= -->
+  <header class="site-header">
+    <div class="wrap navbar">
+      <a href="#" class="brand">
+        <img src="images/logo_circle.png" alt="EduFort Technologies" class="brand-img" />
+        <div class="brand-text">
+          <div class="brand-name">EduFORT Technologies</div>
+          <div class="brand-tagline">Smart Safety for Smarter Schools</div>
+        </div>
+      </a>
+
+      <div class="nav-holder">
+        <div class="spacer"></div>
+
+        <button id="nav-toggle" aria-label="Toggle menu">☰</button>
+
+        <nav id="nav" class="main-menu" aria-label="Main Navigation">
+          <ul>
+            <li><a href="index.html#home">Home</a></li>
+            <li><a href="index.html#about">About</a></li>
+
+            <li class="has-dropdown">
+              <a href="#services">Services▾</a>
+              <ul class="dropdown">
+                <li><a href="student-security.html">Student Security System</a></li>
+                <li><a href="erp.html">ERP Software</a></li>
+                <li><a href="mobile-app.html">Mobile App</a></li>
+		<li><a href="transport.html">Transport Management System</a></li>
+                <li><a href="hostel.html">Hostel Management System</a></li>
+                <li><a href="user-login.html">User Login</a></li>
+              </ul>
+            </li>
+
+            <li><a href="index.html#technology">Technology</a></li>
+
+            <li class="has-dropdown">
+              <a href="#pricing">Pricing▾</a>
+              <ul class="dropdown">
+                <li><a href="registration-plan.html">Registration Plan</a></li>
+                <li><a href="monthly-service.html">Monthly Service Plan</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#commission">Commission▾</a>
+              <ul class="dropdown">
+                <li><a href="self-commission.html">Self Earn</a></li>
+                <li><a href="referral-commission.html">Referral Earn</a></li>
+              </ul>
+            </li>
+
+            <li><a href="index.html#promise">Promise</a></li>
+
+	    <li class="has-dropdown">
+              <a href="#team">Team▾</a>
+              <ul class="dropdown">
+                <li><a href="team.html">Our Team</a></li>
+                <li><a href="investor.html">Investor</a></li>
+              </ul>
+            </li>
+            
+            <li><a href="index.html#contact">Contact</a></li>
+
+            <!-- Mobile only Book Demo -->
+            <li class="mobile-demo"><a href="#contact" class="button">Book Demo</a></li>
+          </ul>
+        </nav>
+
+        <!-- Desktop Book Demo -->
+        <div class="book-demo">
+          <a href="index.html#contact" class="demo-btn button">Book Demo</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- I'll keep it simple: a Back -->
+  <div class="wrap" style="padding:20px;">
+  <div class="referral-commission-card">
+    <a class="orange-btn back-btn" href="index.html#home">← Back</a><br>
+
+    <h1>REFERRAL COMMISSION PLAN</h1><br>
+    <h2>Earn by referring EduFort to other schools</h2><br>
+    <h3>Share the benefits of smart school technology, help other institutions thrive, and earn rewards</h3><br>
+
+    <section class="pricing-cards" style="padding: 50px 20px; background: #f0f4f8; font-family: 'Poppins', sans-serif;">
+  <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+
+    <!-- BASIC PLAN Card -->
+    <div style="background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex: 1 1 280px; padding: 30px; text-align: center;">
+      <h3 style="color: #1e3a8a; margin-bottom: 10px;">BASIC PLAN</h3>
+      <p style="color: #555; margin-bottom: 10px;">Students: 0 – 100</p>
+      <p style="font-weight: 600; color: #1e3a8a; margin-bottom: 20px;">Price: Rs. 700 per student</p>
+
+      <!-- Flow / Chart -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">Referral</div>
+        <div style="font-weight: 700; color: #1e3a8a;">→</div>
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">Subscription</div>
+        <div style="font-weight: 700; color: #1e3a8a;">→</div>
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">
+          5% Commission<br>
+          <span style="font-weight: 600; color: #1e3a8a;">Approx. Rs. 3,500</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex: 1 1 280px; padding: 30px; text-align: center;">
+      <h3 style="color: #1e3a8a; margin-bottom: 10px;">STANDARD PLAN</h3>
+      <p style="color: #555; margin-bottom: 10px;">Students: 101 – 500</p>
+      <p style="font-weight: 600; color: #1e3a8a; margin-bottom: 20px;">Price: Rs. 500 per student</p>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">Referral</div>
+        <div style="font-weight: 700; color: #1e3a8a;">→</div>
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">Subscription</div>
+        <div style="font-weight: 700; color: #1e3a8a;">→</div>
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">
+          5% Commission<br>
+          <span style="font-weight: 600; color: #1e3a8a;">Approx. Rs. 12,500</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- You can replicate similar cards for BRONZE, SILVER, GOLD, PREMIUM plans -->
+    
+    <!-- BRONZE PLAN Card -->
+    <div style="background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex: 1 1 280px; padding: 30px; text-align: center;">
+      <h3 style="color: #1e3a8a; margin-bottom: 10px;">BRONZE PLAN</h3>
+      <p style="color: #555; margin-bottom: 10px;">Students: 501 – 1000</p>
+      <p style="font-weight: 600; color: #1e3a8a; margin-bottom: 20px;">Price: Rs. 350 per student</p>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">Referral</div>
+        <div style="font-weight: 700; color: #1e3a8a;">→</div>
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">Subscription</div>
+        <div style="font-weight: 700; color: #1e3a8a;">→</div>
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">
+          5% Commission<br>
+          <span style="font-weight: 600; color: #1e3a8a;">Approx. Rs. 17,500</span>
+        </div>
+      </div>
+    </div>
+
+	<!-- SILVER PLAN Card -->
+    <div style="background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex: 1 1 280px; padding: 30px; text-align: center;">
+      <h3 style="color: #1e3a8a; margin-bottom: 10px;">SILVER PLAN</h3>
+      <p style="color: #555; margin-bottom: 10px;">Students: 1001 – 2500</p>
+      <p style="font-weight: 600; color: #1e3a8a; margin-bottom: 20px;">Price: Rs. 250 per student</p>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">Referral</div>
+        <div style="font-weight: 700; color: #1e3a8a;">→</div>
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">Subscription</div>
+        <div style="font-weight: 700; color: #1e3a8a;">→</div>
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">
+          5% Commission<br>
+          <span style="font-weight: 600; color: #1e3a8a;">Approx. Rs. 31,250</span>
+        </div>
+      </div>
+    </div>
+  
+<!-- GOLD PLAN Card -->
+    <div style="background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex: 1 1 280px; padding: 30px; text-align: center;">
+      <h3 style="color: #1e3a8a; margin-bottom: 10px;">GOLD PLAN</h3>
+      <p style="color: #555; margin-bottom: 10px;">Students: 2501 – 7500</p>
+      <p style="font-weight: 600; color: #1e3a8a; margin-bottom: 20px;">Price: Rs. 175 per student</p>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">Referral</div>
+        <div style="font-weight: 700; color: #1e3a8a;">→</div>
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">Subscription</div>
+        <div style="font-weight: 700; color: #1e3a8a;">→</div>
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">
+          5% Commission<br>
+          <span style="font-weight: 600; color: #1e3a8a;">Approx. Rs. 65,625</span>
+        </div>
+      </div>
+    </div>
+
+<!-- PREMIUM PLAN Card -->
+    <div style="background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex: 1 1 280px; padding: 30px; text-align: center;">
+      <h3 style="color: #1e3a8a; margin-bottom: 10px;">PREMIUM PLAN</h3>
+      <p style="color: #555; margin-bottom: 10px;">Students: 7501 – Above</p>
+      <p style="font-weight: 600; color: #1e3a8a; margin-bottom: 20px;">Price: Rs. 150 per student</p>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">Referral</div>
+        <div style="font-weight: 700; color: #1e3a8a;">→</div>
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">Subscription</div>
+        <div style="font-weight: 700; color: #1e3a8a;">→</div>
+        <div style="background: #eef6fc; padding: 12px; border-radius: 10px; flex: 1;">
+          5% Commission<br>
+          <span style="font-weight: 600; color: #1e3a8a;">Approx. Rs. 75,000</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+<section id="referral-earn" style="padding: 50px 20px; background: linear-gradient(135deg, #e0f2fe, #f0f9ff); font-family: 'Poppins', sans-serif;">
+  <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+    <h2 style="color: #1e3a8a; font-size: 2rem; margin-bottom: 20px;">Referral Earn</h2>
+    <p style="color: #555; font-size: 1rem; margin-bottom: 40px;">
+      Earn 5% commission through your network’s referrals. Grow your network, maximize your earnings!
+    </p>
+
+    <!-- Flow Chart Container -->
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; align-items: center;">
+
+      <!-- Step 1: You -->
+      <div style="background: #fff; padding: 30px; border-radius: 12px; flex: 1 1 180px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h3 style="color: #1e3a8a; margin-bottom: 10px;">You</h3>
+        <p style="color: #555; font-weight: 600;">Initiate referral to schools/clients.</p>
+      </div>
+
+      <!-- Arrow -->
+      <div style="font-size: 2rem; color: #1e3a8a; display: flex; align-items: center;">→</div>
+
+      <!-- Step 2: Your Referral -->
+      <div style="background: #fff; padding: 30px; border-radius: 12px; flex: 1 1 180px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h3 style="color: #1e3a8a; margin-bottom: 10px;">Your Referral</h3>
+        <p style="color: #555; font-weight: 600;">Subscribes and can refer others.</p>
+      </div>
+
+      <!-- Arrow -->
+      <div style="font-size: 2rem; color: #1e3a8a; display: flex; align-items: center;">→</div>
+
+      <!-- Step 3: Their Referral -->
+      <div style="background: #fff; padding: 30px; border-radius: 12px; flex: 1 1 180px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h3 style="color: #1e3a8a; margin-bottom: 10px;">Their Referral</h3>
+        <p style="color: #555; font-weight: 600;">Subscribes through the network.</p>
+      </div>
+
+      <!-- Arrow -->
+      <div style="font-size: 2rem; color: #1e3a8a; display: flex; align-items: center;">→</div>
+
+      <!-- Step 4: 5% Commission -->
+      <div style="background: #fff; padding: 30px; border-radius: 12px; flex: 1 1 180px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h3 style="color: #1e3a8a; margin-bottom: 10px;">5% Commission</h3>
+        <p style="color: #555; font-weight: 600;">Earned automatically from your network.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+    <div class="card-actions">
+      <a class="orange-btn" href="index.html#contact">Contact Us</a>
+      <a class="orange-btn" href="#join">Join Us</a>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <!-- ========= FOOTER ========= -->
+  <footer class="custom-footer section">
+    <div class="wrap">
+      <div class="footer-wrap">
+        <div class="footer-col footer-about">
+          <img src="images/logo_circle.png" alt="EduFort Logo" class="footer-logo">
+          <p><strong>Smart Safety for Smarter Schools</strong><br>We help institutes to transform into a truly smart institute with 25+ modules.</p>
+        </div>
+
+        <div class="footer-col footer-contact">
+          <h3>Administrative Office</h3>
+          <p>Address: Krishna Rd, Near Goshala,<br>No 10 Basti, Golmuri, Jamshedpur,<br>Jharkhand, India - 831003.</p>
+          <p><strong>Call:</strong> +91 72948-96111</p>
+          <p><strong>Email:</strong> eduforttechjsr@gmail.com</p>
+          <p><strong>Website:</strong> eduforttechjsr.github.io/EduFortTech</p>
+        </div>
+
+        <div class="footer-col footer-links">
+          <h3>Links</h3>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#technology">Technology</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#commission">Commission</a></li>
+            <li><a href="#promise">Promise</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col map-col">
+          <iframe src="https://www.google.com/maps/embed?pb=!4v1754944482584!6m8!1m7!1sDyPgdC5fVV2heuqmi5IojA!2m2!1d22.79722369232139!2d86.23023690430205!3f126.99560375018677!4f4.420471360469946!5f0.7820865974627469" loading="lazy" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>Copyright © EduFort Technologies | Powered by EduFort Technologies</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========= JS ========= -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const navToggle = document.getElementById('nav-toggle');
+      const navMenu = document.querySelector('.main-menu ul');
+
+      // Mobile menu toggle
+      navToggle.addEventListener('click', function () {
+        navMenu.classList.toggle('show');
+      });
+
+      // Mobile dropdown toggle
+      document.querySelectorAll('.has-dropdown > a').forEach(link => {
+        link.addEventListener('click', function (e) {
+          if (window.innerWidth <= 768) {
+            e.preventDefault();
+            const parent = this.parentElement;
+            parent.classList.toggle('active');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+ <script>
+    const navToggle = document.getElementById('nav-toggle');
+    const nav = document.getElementById('nav');
+
+    navToggle.addEventListener('click', () => {
+      nav.classList.toggle('open');
+    });
+
+    // Close menu when a link is clicked (mobile)
+    document.querySelectorAll('#nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>
